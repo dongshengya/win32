@@ -12,7 +12,7 @@ int main(){
 	printf("%s","hello\n");
 	Stu stu[5];
 	int i = 0;
-	printf("ÇëÊäÈëÑ§ÉúĞÅÏ¢£ºÑ§ÉúºÃ ĞÕÃû ÊıÑ§ Ó¢Óï ÓïÎÄ\n");
+	printf("è¯·è¾“å…¥å­¦ç”Ÿä¿¡æ¯ï¼šå­¦ç”Ÿå¥½ å§“å æ•°å­¦ è‹±è¯­ è¯­æ–‡\n");
 	for(int i = 0;i<5;i++){
 		scanf("%d %s %d %d %d",&(stu[i].id),&(stu[i].name),&(stu[i].math),&(stu[i].english),&(stu[i].chinese));
 	}
@@ -25,5 +25,6 @@ int main(){
 		fprintf(fp,"%d %s %d %d %d\n",(stu[i].id),(stu[i].name),(stu[i].math),(stu[i].english),(stu[i].chinese));
 	}
 	fclose(fp);
+	//changed
 	return 0;
 }
