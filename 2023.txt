@@ -1,0 +1,48 @@
+windows上VS项目运行devdemo，注意.h,.lib,.dll文件
+	添加include头文件、lib库   https://blog.csdn.net/Xminyang/article/details/80853422
+	dll文件放在exe相同的文件夹里
+linux上配置32位程序兼容  https://blog.csdn.net/q1302182594/article/details/51610902
+linux上通过makefile文件编译  写好makefile文件后直接命令行输入 make
+linux上运行编译生成的文件 直接命令行输入 ./文件名
+linux上makefile文件的编写
+////////////
+VERSION 	=1
+CC			=gcc
+TARGET		=sdkdemo
+DEBUG 		= 
+
+CFLAGS		= -no-pie -rdynamic -O2 -Wall -D_GNU_SOURCE -ffunction-sections -fdata-sections -D_COS_OS=_COS_LINUX
+
+LIB_NAMES 	= -lcommon -lcos -lthirdparty -lpthread -lm -ldl -lmbedtls -lmbedx509 -lmbedcrypto
+
+LIB_PATH 	+= -L./static #lib库的路径
+#LIB_PATH 	+= -L./lib/static/test
+#LIB_PATH 	+= -L./thirdparty/lib
+
+INCLUDES	+= -I./include #lnclude 头文件的路径
+#INCLUDES	+= -I./include/test
+INCLUDES	+= -I./thirdparty/include
+INCLUDES	+= -I./src/include
+
+SRC	 	+=$(wildcard ./*.c) #待编译的源文件的路径和后缀
+SRC	 	+= $(wildcard ./thirdparty/src/*.c)
+#NOUSEFULE += ./src/audio.c
+SOURCES = $(filter-out $(NOUSEFULE),$(SRC))
+
+OBJ			=$(patsubst %.c, %.o, $(SOURCES))
+
+all:$(TARGET)
+
+#links
+$(TARGET):$(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(LIB_PATH) $(LIB_NAMES) -o $(TARGET)_$(VERSION)
+
+#compile
+%.o: %.c
+	$(CC) $(INCLUDES) $(DEBUG) -c $(CFLAGS) $< -o $@
+
+.PHONY:clean
+clean:
+	@echo "Remove linked and compiled files......"
+	rm -rf $(OBJ) $(TARGET)_$(VERSION)
+////////
