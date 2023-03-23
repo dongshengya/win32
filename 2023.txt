@@ -10,7 +10,13 @@ VERSION 	=1
 CC			=gcc
 TARGET		=sdkdemo
 DEBUG 		= 
-
+#CFLAGS 表示用于 C 编译器的选项
+#-no-pie 不要创建 position independent executable
+#-rdynamic选项新添加的是动态连接符号信息，用于动态连接功能，
+#-D_GNU_SOURCE 这个参数表示你编写符合 GNU 规范的代码
+#GCC链接操作是以section作为最小的处理单元，只要一个section中的某个符号被引用，该section就会被加入到可执行程序中去。
+#因此，GCC在编译时可以使用 -ffunction-sections和 -fdata-sections 将每个函数或符号创建为一个sections，其中每个sections名与function或data名保持一致。
+#而在链接阶段， -Wl,–gc-sections 指示链接器去掉不用的section（其中-wl, 表示后面的参数 -gc-sections 传递给链接器），这样就能减少最终的可执行程序的大小了。
 CFLAGS		= -no-pie -rdynamic -O2 -Wall -D_GNU_SOURCE -ffunction-sections -fdata-sections -D_COS_OS=_COS_LINUX
 
 LIB_NAMES 	= -lcommon -lcos -lthirdparty -lpthread -lm -ldl -lmbedtls -lmbedx509 -lmbedcrypto
@@ -24,14 +30,13 @@ INCLUDES	+= -I./include #lnclude 头文件的路径
 INCLUDES	+= -I./thirdparty/include
 INCLUDES	+= -I./src/include
 
-SRC	 	+=$(wildcard ./*.c) #待编译的源文件的路径和后缀
-SRC	 	+= $(wildcard ./thirdparty/src/*.c)
+SRC	 	+=$(wildcard ./*.c) #扩展通配符，取当前目录下所有.c文件
 #NOUSEFULE += ./src/audio.c
 SOURCES = $(filter-out $(NOUSEFULE),$(SRC))
 
-OBJ			=$(patsubst %.c, %.o, $(SOURCES))
+OBJ			=$(patsubst %.c, %.o, $(SOURCES))#替换, patsubst 把$(SOURCE)中的变量符合后缀是.c的全部替换成.o
 
-all:$(TARGET)
+all:$(TARGET)#编译结果 sdkdemo.a
 
 #links
 $(TARGET):$(OBJ)
@@ -46,3 +51,42 @@ clean:
 	@echo "Remove linked and compiled files......"
 	rm -rf $(OBJ) $(TARGET)_$(VERSION)
 ////////
+
+
+回调函数
+
+////////
+定义回调函数指针，定义PFUN_LISTENSESION_STATUS类型的函数指针
+typedef int (*PFUN_LISTENSESION_STATUS)(unsigned int uiSessionId,int iConStatus);
+回调函数实现
+int cf(unsigned int a,int b){return 0;}
+回调函数作为参数输入某个函数
+函数cf需要传入一个PFUN_LISTENSESION_STATUS类型的函数指针
+int cf(PFUN_LISTENSESION_STATUS cf);
+和定义的函数指针类型相同的任意函数（相同类型的返回值和参数列表），都可以直接把这个函数名当作参数传入需要PFUN_LISTENSESION_STATUS类型参数的函数中
+set_cf(cf);
+
+eg
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef int(*callBackF)(int a,int b);//定义回调函数指针
+int fun(int a,int b){printf("fun\n");return 0;}//这个函数名作为回调函数指针传入
+int setCF(callBackF fun){fun(1,2);return 0;}//只需传入函数名即可，在这个函数里运行传入的函数时再传入参数
+int main(){
+setCF(fun);
+system("pause");
+return 0;
+}
+////////
+
+wireshark抓取电脑和虚拟机之间的传输 ：虚拟机使用nat方式（默认方式）连接网络，那么应该对于VMnet8
+
+
+
+
+
+
+
+
+
