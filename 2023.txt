@@ -4,8 +4,10 @@ windows上VS项目运行devdemo，注意.h,.lib,.dll文件
 linux上配置32位程序兼容  https://blog.csdn.net/q1302182594/article/details/51610902
 linux上通过makefile文件编译  写好makefile文件后直接命令行输入 make
 linux上运行编译生成的文件 直接命令行输入 ./文件名
-linux上makefile文件的编写
+
+linux上makefile文件的编写 https://zhuanlan.zhihu.com/p/359807792
 ////////////
+#  $@，$^，$<代表的意义分别是： $@--目标文件，$^--所有的依赖文件，$<--第一个依赖文件。
 VERSION 	=1
 CC			=gcc
 TARGET		=sdkdemo
@@ -64,8 +66,7 @@ int cf(unsigned int a,int b){return 0;}
 函数cf需要传入一个PFUN_LISTENSESION_STATUS类型的函数指针
 int cf(PFUN_LISTENSESION_STATUS cf);
 和定义的函数指针类型相同的任意函数（相同类型的返回值和参数列表），都可以直接把这个函数名当作参数传入需要PFUN_LISTENSESION_STATUS类型参数的函数中
-set_cf(cf);
-
+set_cf(cf);//注册函数（回调函数）
 eg
 #include <stdio.h>
 #include <stdlib.h>
@@ -82,11 +83,21 @@ return 0;
 
 wireshark抓取电脑和虚拟机之间的传输 ：虚拟机使用nat方式（默认方式）连接网络，那么应该对于VMnet8
 
+静态库和动态库的制作和使用
+https://blog.csdn.net/weixin_47826078/article/details/120474883
+生成的库不一定需要移动到usr/lib之类的文件夹，直接放在对应工程文件夹中的lib文件夹，方便makefile编译
 
 
+回调函数中不进行阻塞操作，阻塞操作一般在主函数中运行。
+阻塞IO：在准备阶段即同步阻塞，应用进程调用I/O操作时阻塞，只有等待要操作的数据准备好，并复制到应用进程的缓冲区中才返回；
 
+打洞 https://blog.csdn.net/Tornado1102/article/details/76093884
 
+如果两个IP地址在子网掩码的按位与的计算下所得结果相同，即表明它们共属于同一子网中。
 
+Ubuntu 16.04 LTS无法打开“系统设置” https://blog.csdn.net/u25th_engineer/article/details/93719298
 
+c++学习网 https://en.cppreference.com/w/
 
-
+pdf工具 https://tools.pdf24.org/zh/creator
+磁盘检测整理工具 https://www.diskgenius.cn/
